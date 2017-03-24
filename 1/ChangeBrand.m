@@ -16,16 +16,16 @@ for t = 1:T-1
     
     % Buy new phone
     % 1.1
-       if rand < p
-           u(t+1) = u(t+1) + 1;
-       end
+%        if rand < p
+%            u(t+1) = u(t+1) + 1;
+%        end
    
     % 1.3
-%     if rand < q
-%         if rand < .5
-%             u(t+1) = u(t+1) + 1;
-%         end
-%     else
-%         u(t+1) = u(t+1) + (rand > u(t)/N)*(rand > u(t)/N);
-%     end
+    if rand < q
+        if rand < .5
+            u(t+1) = u(t+1) + 1;
+        end
+    else
+        u(t+1) = u(t+1) + (rand < u(t+1)/N)*(rand < u(t+1)/N);
+    end
 end

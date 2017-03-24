@@ -1,5 +1,5 @@
 % MoCS Project 1
-%
+% fashion 1.1
 %
 
 clear all; close all; clc;
@@ -7,17 +7,18 @@ clear all; close all; clc;
 % Param
 T = 10000;
 N = 15; % Total students 15 or 100
-p = 0.7; % 0.5 or 0.7
-q = 0.1:0.01:1;
-u1 = rand*N;
+p = 0.5; % 0.5 or 0.7
+q = 1;
 
-figure()
-hold on;
-%for i = 1:length(q)
-% 1.1 & 1.3 Changing brand
-u = ChangeBrand(p, q, N, u1, T);
+% 1.1 Changing brand
+N_sims = 100;
+u = zeros(N_sims, T);
+for i = 1:N_sims
+   u1 = round(rand*N);
+   u(i, :) = ChangeBrand(p, q(1), N, u1, T);
+end
 
-% % 1.2 Implementing master equation
+% 1.2 Implementing master equation
 % u_m = zeros(1, N);
 % i = 1;
 % for t = 1:T-1
@@ -28,6 +29,6 @@ u = ChangeBrand(p, q, N, u1, T);
 % end
 
 % Plot equilibrium distribution
+figure()
+hist(u(:,end), 100);
 
-plot(1:T, u);
-%end
