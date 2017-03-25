@@ -7,10 +7,10 @@ u(1) = u1;
 
 for t = 1:T-1
     if rand < u(t)/N
-        %iPhone broke
+        % iPhone broke
         u(t+1) = u(t) - 1;
     else
-        %Other brand broke
+        % Other brand broke
         u(t+1) = u(t);
     end
     
