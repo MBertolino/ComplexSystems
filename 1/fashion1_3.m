@@ -12,7 +12,7 @@ T = 1000;
 N = 100; % Total students 15 or 100
 p = 0.5; % 0.5 or 0.7
 q = 0:0.01:1;
-N_sims = 1000;
+N_sims = 2000;
 
 % 1.3
 u = zeros(T, N_sims);

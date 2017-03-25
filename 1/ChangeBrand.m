@@ -8,24 +8,43 @@ u(1) = u1;
 for t = 1:T-1
     if rand < u(t)/N
         % iPhone broke
-        u(t+1) = u(t) - 1;
+        if rand < q
+            if rand < .5
+                % Get new iPhone
+                u(t+1) = u(t);
+            else
+                u(t+1) = u(t) - 1;
+            end
+        else
+            % Look at neighbors
+            u(t+1) = u(t) - (rand < (N - u(t))/N)*(rand < (N - u(t))/N);
+        end
     else
         % Other brand broke
-        u(t+1) = u(t);
+        if rand < q
+            if rand < .5
+                % Get new iPhone
+                u(t+1) = u(t) + 1;
+            else
+                u(t+1) = u(t);
+            end
+        else
+            u(t+1) = u(t) + (rand < u(t)/N)*(rand < u(t)/N);
+        end
     end
     
     % Buy new phone
     % 1.1
-    % if rand < p
-    % u(t+1) = u(t+1) + 1;
-    % end
+%     if rand < p
+%         u(t+1) = u(t+1) + 1;
+%     end
    
     % 1.3
-    if rand < q
-        if rand < .5
-            u(t+1) = u(t+1) + 1;
-        end
-    else
-        u(t+1) = u(t+1) + (rand < u(t+1)/N)*(rand < u(t+1)/N);
-    end
+%     if rand < q
+%          if rand < .5
+%             u(t+1) = u(t+1) + 1;
+%          end
+%     else
+%         u(t+1) = u(t+1) + (rand < u(t+1)/N)*(rand < u(t+1)/N);
+%     end
 end
