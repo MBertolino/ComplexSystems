@@ -7,18 +7,18 @@ u(1) = u1;
 
 for t = 1:T-1
     if rand < u(t)/N
-        %disp('iPhone broke');
+        %iPhone broke
         u(t+1) = u(t) - 1;
     else
-        %disp('Other brand broke');
+        %Other brand broke
         u(t+1) = u(t);
     end
     
     % Buy new phone
     % 1.1
-%        if rand < p
-%            u(t+1) = u(t+1) + 1;
-%        end
+    % if rand < p
+    % u(t+1) = u(t+1) + 1;
+    % end
    
     % 1.3
     if rand < q
