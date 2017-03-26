@@ -9,7 +9,7 @@ for t = 1:T-1
     if rand < u(t)/N
         % iPhone broke
         if rand < q
-            if rand < .5
+            if rand < p
                 % Get new iPhone
                 u(t+1) = u(t);
             else
@@ -22,7 +22,7 @@ for t = 1:T-1
     else
         % Other brand broke
         if rand < q
-            if rand < .5
+            if rand < p
                 % Get new iPhone
                 u(t+1) = u(t) + 1;
             else
@@ -37,14 +37,5 @@ for t = 1:T-1
     % 1.1
 %     if rand < p
 %         u(t+1) = u(t+1) + 1;
-%     end
-   
-    % 1.3
-%     if rand < q
-%          if rand < .5
-%             u(t+1) = u(t+1) + 1;
-%          end
-%     else
-%         u(t+1) = u(t+1) + (rand < u(t+1)/N)*(rand < u(t+1)/N);
 %     end
 end
