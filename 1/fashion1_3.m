@@ -5,7 +5,7 @@
 % fashion 1.1
 %
 
-clear all; close all;% clc;
+clear all; close all; clc;
 
 % Param
 T = 1000;
@@ -35,6 +35,7 @@ end
 %hist(u_eq(:, 21))
 
 % 1.4 Bifurcation diagram
+figure()
 colormap hot
 imagesc(u_dynamics)
 
