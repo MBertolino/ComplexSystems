@@ -1,9 +1,6 @@
 % MoCS
-% fashion 1.3
-
-% MoCS Project 1
-% fashion 1.1
 %
+% fashion 1.3 & 1.4
 
 clear all; close all; clc;
 
