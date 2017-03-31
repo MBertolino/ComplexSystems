@@ -12,6 +12,7 @@ y_new = 299;
 world(y_new, x_new) = 1;
 
 % Step in time and paint
+figure()
 colormap('gray')
 for t = 1:T
     % Update coordinates
