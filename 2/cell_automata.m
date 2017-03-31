@@ -1,8 +1,8 @@
 clear all; close all; % clc;
 
 T = 70;
-rule = dec2bin(30, 8);
-x0 = dec2bin(1024^8, 160);
+rule = dec2bin(110, 8);
+x0 = dec2bin(1131^8, 160);
 
 % Initialize matrix
 a = zeros(T, length(x0));
