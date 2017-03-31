@@ -1,14 +1,14 @@
 clear all; close all; clc;
 
-T = 10000;
-N = 100;
+T = 11000;
+N = 1000;
 world = zeros(N, N);
 
 % Initial coordinates of painter
-x_old = 30;
-x_new = 30;
-y_old = 29;
-y_new = 30;
+x_old = 300;
+x_new = 300;
+y_old = 300;
+y_new = 299;
 world(y_new, x_new) = 1;
 
 % Step in time and paint
@@ -38,6 +38,9 @@ for t = 1:T
     y_old = y;
     
     % Paint :)
-    imagesc(imcomplement(world))
-    pause(0.002);
+    %imagesc(imcomplement(world))
+    %pause(0.002);
 end
+
+% Final world
+imagesc(imcomplement(world));
