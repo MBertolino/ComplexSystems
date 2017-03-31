@@ -1,5 +1,6 @@
 clear all; close all; clc;
 
+T = 10000;
 N = 100;
 world = zeros(N, N);
 
@@ -8,17 +9,15 @@ x_old = 30;
 x_new = 30;
 y_old = 29;
 y_new = 30;
-
 world(y_new, x_new) = 1;
 
+% Step in time and paint
 colormap('gray')
-%imagesc(imcomplement(world));
-
-% Step in time
-T = 10000;
 for t = 1:T
+    % Update coordinates
     x = x_new;
     y = y_new;
+    
     % If white
     if (world(y, x) == 0)
        world(y, x) = 1;
