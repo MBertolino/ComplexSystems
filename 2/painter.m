@@ -1,14 +1,14 @@
 clear all; close all; clc;
 
-T = 11000;
-N = 1000;
+T = 18000;
+N = 300;
 world = zeros(N, N);
 
 % Initial coordinates of painter
-x_old = 300;
-x_new = 300;
-y_old = 300;
-y_new = 299;
+x_old = 100;
+x_new = 100;
+y_old = 101;
+y_new = 100;
 world(y_new, x_new) = 1;
 
 % Step in time and paint
@@ -45,3 +45,4 @@ end
 
 % Final world
 imagesc(imcomplement(world));
+title(['Time: ' num2str(T)])

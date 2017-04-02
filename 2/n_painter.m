@@ -1,18 +1,18 @@
 clear all; %close all; clc;
 
-T = 100;
-N = 30;
+T = 10000;
+N = 100;
 world = zeros(N, N);
 
 % Colors and rules
-color = [0 12 24];
-turn = [1 -1 1]; % 1=left, -1=right
+color = [0 12 24 36 48 60 72 84 96];
+turn = [1 1 1 1 -1 1 1 1 1]; % 1=left, -1=right
 
 % Initial coordinates of painter
-x_old = 15;
-x_new = 15;
-y_old = 15;
-y_new = 14;
+x_old = N/2;
+x_new = N/2;
+y_old = N/2;
+y_new = N/2 - 1;
 world(y_new, x_new) = color(1);
 
 % Step in time and paint
