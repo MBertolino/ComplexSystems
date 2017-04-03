@@ -5,8 +5,8 @@
 clear all; close all; clc;
 
 % Param
-T = 1000;
-N = 100; % Total students 15 or 100
+T = 10000;
+N = 15; % Total students 15 or 100
 p = 0.5; % 0.5 or 0.7
 q = 0:0.01:1; % 0.2 rapid change
 N_sims = 1000;
@@ -28,13 +28,18 @@ for j = 1:length(q)
     end
 end
 
-% 1.3 plot histogram for q = 0.2
-%hist(u_eq(:, 21))
+% 1.3 plot histogram for q = 0.2 (?)
+figure()
+hist(u_eq(:, 21))
+xlabel('Number of iPhone owners')
+ylabel('Relative frequency')
 
 % 1.4 Bifurcation diagram
 figure()
 colormap hot
 imagesc(u_dynamics)
+xlabel('Parameter q')
+ylabel('Relative frequency')
 
 figure()
 plot(1:T, u(:, end-5:end))
