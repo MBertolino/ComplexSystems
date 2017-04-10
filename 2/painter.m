@@ -6,7 +6,7 @@ world = zeros(N, N);
 
 % Colors and rules
 color = [0 1];
-turn = [1 -1]; % 1=left, -1=right
+turn = [1 -1]; % 1 = left, -1 = right
 
 % Initial coordinates of painter
 x_old = N/2;
@@ -27,9 +27,29 @@ for t = 1:T
     
    % Update old coordinates
     x_new = x + turn(idx)*(y_old - y);
-    y_new = y + turn(idx)*(x - x_old);
+    y_new = y + turn(idx)*(x - x_old);   
+    
     x_old = x;
     y_old = y;
+    
+    % Account for boundary conditions
+    if x_new == N+1
+        x_new = 1;
+        x_old = 0;
+    end
+    if x_new == 0
+        x_new = N;
+        x_old = N+1;
+    end
+    
+    if y_new > N
+        y_new = 1;
+        y_old = 0;
+    end
+    if y_new < 1
+        y_new = N;
+        y_old = N+1;
+    end
 end
 
 % Final world
