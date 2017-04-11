@@ -1,7 +1,7 @@
 clear all; % close all; clc;
 
-T = 11000;
-N = 100;
+T = 20000;
+N = 300;
 world = zeros(N, N);
 
 % Colors and rules
