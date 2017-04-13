@@ -5,7 +5,7 @@
 clear all; close all; clc;
 
 % Param
-T = 10000;
+T = 1000;
 N = [15 100]; % Total students 15 or 96
 p = 0.5; % 0.5 or 0.7
 q = 1;
@@ -34,7 +34,7 @@ for n = 1:length(N)
     u_eq(N(n)+1, 1) = sum(u(:, end) == N(n))/N_sims;
         
     % 1.2 Implementing master equationuntitled
-    for i = 0:N(n)
+    for i = 1:N(n)
         u_m(i, 1) = nchoosek(N(n), i)*p^i*(1-p)^(N(n)-i);
     end
     

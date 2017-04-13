@@ -5,11 +5,11 @@
 clear all; close all; clc;
 
 % Param
-T = 10000;
+T = 1000;
 N = 1000; % Total students 15 or 100
 p = 0.5; % 0.5 or 0.7
-q = 0:0.001:1; % 0.2 rapid change
-N_sims = 10000;
+q = 0:0.01:1; % 0.2 rapid change
+N_sims = 1000;
 
 % 1.3 & 1.4
 u = zeros(T, N_sims);
