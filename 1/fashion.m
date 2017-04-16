@@ -33,7 +33,7 @@ for n = 1:length(N)
     end
     u_eq(N(n)+1, 1) = sum(u(:, end) == N(n))/N_sims;
         
-    % 1.2 Implementing master equationuntitled
+    % 1.2 Implementing master equation
     for i = 1:N(n)
         u_m(i, 1) = nchoosek(N(n), i)*p^i*(1-p)^(N(n)-i);
     end

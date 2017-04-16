@@ -5,8 +5,8 @@
 clear all; close all; clc;
 
 % Param
-T = 1000;
-N = 1000; % Total students 15 or 100
+T = 10000;
+N = 15; % Total students 15 or 100
 p = 0.5; % 0.5 or 0.7
 q = 0:0.01:1; % 0.2 rapid change
 N_sims = 1000;
@@ -28,14 +28,13 @@ for j = 1:length(q)
         u_eq(i, j) = u(end, i);
     end
     
-    for k = 0:N-1
-        u_dynamics(k+1, j) = sum(u_eq(:, j) == k);
-    end
-    
+%     for k = 0:N-1
+%         u_dynamics(k+1, j) = sum(u_eq(:, j) == k);
+%     end
+%     
     waitbar(j/length(q))
 end
-close(h) 
-
+close(h)
 
 % 1.5 Mean-field equation
 for i = 1:length(q)
@@ -48,19 +47,19 @@ end
 
 % 1.3 plot histogram for q = 0.2 (21) (?)
 figure()
-hist(u_eq(:, 34))
+hist(u_eq(:, 21))
 xlabel('Number of iPhone owners')
 ylabel('Relative frequency')
 
 % 1.4 Bifurcation diagram
 figure()
 colormap hot
-imagesc(u_dynamics)
+imagesc(q, 1:N, u_dynamics/N_sims, [0 0.1])
 xlabel('Parameter q')
 ylabel('Relative frequency')
 
-% 1.5 Plot Mean-field equation
-figure()
-plot(q, y)
-xlabel('Parameter q')
-ylabel('Relative frequency')
+% % 1.5 Plot Mean-field equation
+% figure()
+% plot(q, y)
+% xlabel('Parameter q')
+% ylabel('Relative frequency')
