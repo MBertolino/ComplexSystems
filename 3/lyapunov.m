@@ -17,10 +17,9 @@ B_p(1, :) = n+1;
 for i = 1:length(b)
     for t = 1:T-1
         A_mf(t+1, i) = n*0.5*b(i)*exp(-A_mf(t, i)./n)*(A_mf(t, i)./n).^2;
-        A_p(t, i) = 0.5*b(i)/(n.^2)*exp(-A_mf(t, i)./n)*(2*n - A_mf(t, i));
-        lambda(i) = lambda(i) + log(abs(A_p(t, i)));
-    end%         A_p(1, i) = 0.5*b(i)*A_mf(end, i)*exp(-A_mf(end, i)/n)./n*(2 - A_mf(end, i)./n);
-
+        A_p(t+1, i) = 0.5*b(i)/(n.^2)*exp(-A_mf(t, i)./n)*(2*n - A_mf(t, i));
+        lambda(i) = lambda(i) + (abs(A_p(t+1, i)));
+    end
     lambda(i) = (lambda(i))./T;
 end
 

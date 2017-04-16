@@ -20,7 +20,7 @@ for t = 3:T
         
         % All individuals choose which site to visit locally [i-d, i+d]
         pos = randi(length(move), 1, b);
-        site_temp = move(pos);
+        site_temp = move(pos);        
         site(unique(move)) = site(unique(move)) + histc(site_temp, unique(move));
     end
     

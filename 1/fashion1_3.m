@@ -45,9 +45,9 @@ for i = 1:length(q)
     y(i, 3) = 0.5 + sqrt(0.25 + 0.5*q(i)./(q(i) - 1));
 end
 
-% 1.3 plot histogram for q = 0.2 (21) (?)
+% 1.3 plot histogram for q = 0.2 (16) (?)
 figure()
-hist(u_eq(:, 21))
+hist(u_eq(:, 16))
 xlabel('Number of iPhone owners')
 ylabel('Relative frequency')
 
