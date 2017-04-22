@@ -5,7 +5,7 @@ L = 20;
 N = 5; % Individuals
 R = 2; % Neighbor distance
 p = 0.3;
-q = 0.;
+q = p + 0.3;
 delta = 0.1;
 eta = 0.5;
 T = 1000;
@@ -48,7 +48,7 @@ for t = 2:T
         end
         
         % Same direction
-        if (chance < q)
+        if (chance < q && chance > p)
             dir_new = pi + neigh(follow_me, 3);
             theta_new(n) = dir_new - floor(dir_new);
         end
@@ -60,19 +60,18 @@ for t = 2:T
     status(:, 3) = theta_new;
     
     % Update positions
-    x_dir = cos(status(:, 3));
-    y_dir = sin(status(:, 3));
-    status(:, 4) = sqrt(x_dir.^2 + y_dir.^2);
-    status(:, 1) = status(:, 1) + delta*x_dir./status(:, 4);
-    status(:, 2) = status(:, 2) + delta*y_dir./status(:, 4);
+    dir(:, 1) = cos(status(:, 3));
+    dir(:, 2) = sin(status(:, 3));
+    status(:, 4) = sqrt(dir(:, 1).^2 + dir(:, 2).^2);
+    status(:, [1 2]) = status(:, [1 2]) + delta*dir(:, [1 2])./status(:, 4);
     
     % Periodic boundaries
     status(status(:, 1) > L, 1) = status(status(:, 1) > L, 1) - ...
         floor(status(status(:, 1) > L, 1));
     status(status(:, 2) > L, 2) = status(status(:, 2) > L, 2) - ...
         floor(status(status(:, 2) > L, 2));
-    status(status(:, 1) < 0, 1) = L; %floor(status(status(:, 1) < 0, 1));
-    status(status(:, 2) < 0 , 2) = L; %floor(status(status(:, 2) < 0, 2));
+    status(status(:, 1) < 0, 1) = L;
+    status(status(:, 2) < 0 , 2) = L;
     
     % Plot all individuals
     plot(status(:, 1), status(:, 2), '*')
