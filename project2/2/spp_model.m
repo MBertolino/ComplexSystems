@@ -4,12 +4,12 @@ clear all; close all;
 L = 20;
 N = 50; % Individuals
 R = 2; % Neighbor distance
-p = 0.1;
-q = p + 0:0.01:0.9;
+p = 0:0.1:0.9;
+q = p + 0;
 delta = 0.5;
 eta = 0.1;
-T = 100;
-N_sims = 1000;
+T = 200;
+N_sims = 10;
 
 % Initialize position and velocities
 status = rand(N, 3); % x_i(t), y_i(t), theta_i(t)
@@ -19,22 +19,24 @@ theta_new = zeros(N, 1); % theta_i(t+1)
 
 % Allocate alignment and aggregation measures
 psi = zeros(T, length(q));
-phi = zeros(N, length(p));
+phi = zeros(T, length(p));
 
 % Simulate
-figure()
-plot(status(:, 1), status(:, 2), '*')
-xlim([0 20])
-ylim([0 20])
-pause(1)
+% figure()
+% plot(status(:, 1), status(:, 2), '*')
+% xlim([0 20])
+% ylim([0 20])
+% pause(1)
+tic;
 for iq = 1:length(q)
     for j = 1:N_sims
         psi(1, iq) = (sum(cos(status(:, 3))).^2 + sum(sin(status(:, 3))).^2)/N;
         for t = 2:T
             for n = 1:N
                 % Find neighbors
-                dist = sqrt((status(n, 1) - status(:, 1)).^2 + (status(n, 2) - status(:, 2)).^2);
-                neigh = status((dist > 0) & (dist < R), :);
+                dist(:, n) = sqrt((status(n, 1) - status(:, 1)).^2 + (status(n, 2) - status(:, 2)).^2);
+                total_dist(n) = mean(dist(:, n));
+                neigh = status((dist(:, n) > 0) & (dist(:, n) < R), :);
                 
                 % Follow neighbors with probability p or q
                 chance = rand;
@@ -47,14 +49,14 @@ for iq = 1:length(q)
                 end
                 
                 % Face neighbor
-                if (chance < p)
+                if (chance < p(iq))
                     neigh_x = neigh(follow_me, 1);
                     neigh_y = neigh(follow_me, 2);
                     theta_new(n) = atan2((neigh_y - status(n, 2)),(neigh_x - status(n, 1)));
                 end
                 
                 % Same direction
-                if (chance < q(iq) && chance > p)
+                if (chance < q(iq) && chance > p(iq))
                     %             dir_new = pi + neigh(follow_me, 3);
                     %             theta_new(n) = dir_new - floor(dir_new);
                     theta_new(n) = neigh(follow_me, 3);
@@ -77,31 +79,34 @@ for iq = 1:length(q)
             status(status(:, 2) < 0, 2) = L + status(status(:, 2) < 0, 2);
             
             % 2.2 Alignment measure
-            psi(t, iq) = psi(t, iq) + (sum(cos(status(:, 3))).^2 + sum(sin(status(:, 3))).^2)/N;
+%             psi(t, iq) = psi(t, iq) + (sum(cos(status(:, 3))).^2 + sum(sin(status(:, 3))).^2)/N;
             
             % 2.3 Aggregation measure
-            %             mu = mean(status(:, [1 2]));
-            %             phi(t, iq) = phi(t, iq) + (sum(status(:, 1) - mu(1)).^2 + sum(status(:, 2) - mu(2)).^2)/N;
+%             mu = mean(status(:, [1 2]));
+            phi(t, iq) = phi(t, iq) + mean(total_dist);
+%             phi(t, iq) = phi(t, iq) + (sum(status(:, 1) - mu(1)).^2 + sum(status(:, 2) - mu(2)).^2)/N;
             
             % Plot all individuals
-%             plot(status(:, 1), status(:, 2), 's')
-%             xlim([0 L])
-%             ylim([0 L])
-%             pause(0.01)
+            %             plot(status(:, 1), status(:, 2), 's')
+            %             xlim([0 L])
+            %             ylim([0 L])
+            %             pause(0.01)
         end
     end
     %     fprintf('Running (N = %i). Progress: ', iq); tic;
 end
+toc;
 psi = psi/N_sims;
+phi = phi/N_sims;
 
 % 2.2 Plot alignment measure
-figure()
-plot(q, psi, 'k.')
-xlabel('Parameter q')
-ylabel('Alignment [\psi(t)]')
+% figure()
+% plot(q, psi, 'k.')
+% xlabel('Parameter q')
+% ylabel('Alignment [\psi(t)]')
 
 % 2.3 Plot aggregation measure
-% figure()
-% plot(p, phi(end, :), 'k.')
-% xlabel('Parameter p')
-% ylabel('Aggregation [\phi(t)]')
+figure()
+plot(1:T, phi)
+xlabel('Time')
+ylabel('Aggregation [\phi(t)]')
