@@ -4,12 +4,12 @@ clear all; close all;
 L = 20;
 N = 50; % Individuals
 R = 2; % Neighbor distance
-p = 0:0.1:0.9;
-q = p + 0;
+p = 0.1;
+q = p + 0:0.1:0.9;
 delta = 0.5;
 eta = 0.1;
-T = 200;
-N_sims = 10;
+T = 100;
+N_sims = 100;
 
 % Initialize position and velocities
 status = rand(N, 3); % x_i(t), y_i(t), theta_i(t)
@@ -49,14 +49,14 @@ for iq = 1:length(q)
                 end
                 
                 % Face neighbor
-                if (chance < p(iq))
+                if (chance < p)
                     neigh_x = neigh(follow_me, 1);
                     neigh_y = neigh(follow_me, 2);
                     theta_new(n) = atan2((neigh_y - status(n, 2)),(neigh_x - status(n, 1)));
                 end
                 
                 % Same direction
-                if (chance < q(iq) && chance > p(iq))
+                if (chance < q(iq) && chance > p)
                     %             dir_new = pi + neigh(follow_me, 3);
                     %             theta_new(n) = dir_new - floor(dir_new);
                     theta_new(n) = neigh(follow_me, 3);
@@ -79,11 +79,11 @@ for iq = 1:length(q)
             status(status(:, 2) < 0, 2) = L + status(status(:, 2) < 0, 2);
             
             % 2.2 Alignment measure
-%             psi(t, iq) = psi(t, iq) + (sum(cos(status(:, 3))).^2 + sum(sin(status(:, 3))).^2)/N;
+            psi(t, iq) = psi(t, iq) + sqrt(sum(cos(status(:, 3))).^2 + sum(sin(status(:, 3))).^2)/N;
             
             % 2.3 Aggregation measure
 %             mu = mean(status(:, [1 2]));
-            phi(t, iq) = phi(t, iq) + mean(total_dist);
+%             phi(t, iq) = phi(t, iq) + mean(total_dist);
 %             phi(t, iq) = phi(t, iq) + (sum(status(:, 1) - mu(1)).^2 + sum(status(:, 2) - mu(2)).^2)/N;
             
             % Plot all individuals
@@ -100,10 +100,10 @@ psi = psi/N_sims;
 phi = phi/N_sims;
 
 % 2.2 Plot alignment measure
-% figure()
-% plot(q, psi, 'k.')
-% xlabel('Parameter q')
-% ylabel('Alignment [\psi(t)]')
+figure()
+plot(q, psi, 'k.')
+xlabel('Parameter q')
+ylabel('Alignment [\psi(t)]')
 
 % 2.3 Plot aggregation measure
 figure()

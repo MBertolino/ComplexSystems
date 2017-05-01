@@ -1,5 +1,5 @@
 
-N = 500;
+N = 5000;
 link_density = 0.0016;
 
 % Pre-allocate
@@ -21,9 +21,12 @@ end
 for n = 1:N
     links_hist(n) = sum(links(n, :));
 end
+% links_hist = links_hist./N;
 
 % Plot histogram
 figure()
 hist(links_hist)
+xlabel('Number of links')
+ylabel('Frequency')
 % plot(graph(links))
 
