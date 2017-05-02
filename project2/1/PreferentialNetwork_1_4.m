@@ -1,71 +1,56 @@
 clear all; close all;
 
 % Param
-T = 100;
+T = 5000;
 N = 4;
 m = 4; % Number of links to added individiual
 
 % Initialize links
-links = zeros(T+3, T+3);
+links = zeros(T, T);
 links([1 2], [1 2]) = 1;
 links([3 4], [3 4]) = 1;
-for i = 1:4
-    links(i, i) = 0;
-end
-N_links = zeros(T+3, 1);
-N_links([1:4]) = 1;
+links = links - diag(diag(links));
+
+k = zeros(T, 1);
+k(1:N) = 1;
 prob = zeros(N, 1);
-
-% Plot initial network
-% plot(graph(links))
-% pause(1)
-
-% Initialize probabilities
-k = zeros(T+3, 1);
-P = zeros(T+3, 1);
+P = zeros(T, 1);
 
 % Initialize waitbar
 h = waitbar(0, 'Progress: ');
 
 % Step in time
 tic;
-for t = 2:T
+for t = 5:T
     % Which to link
-    tot_links = sum(N_links);
+    k_tot = sum(k);
     for n = 1:N
-        P(n) = N_links(n)./(tot_links);
+        P(n) = k(n)./k_tot;
     end
-
-    prob(1:t+2) = P(1:t+2).*rand(t+2, 1);
     
     % Add one new individual
-    [~, new_idx] = sort(prob(1:t+2));
-    %     links(t+3, new_idx(end-(m-1):end)) = 1;
-    %     links(new_idx(end-(m-1):end), t+3) = 1;
-    %     new_idx(end-(m-1):end)
+    new_idx = randsample(1:N, m, 1, P(1:t-1));
+    links(t, new_idx) = 1;
+    links(new_idx, t) = 1;
     
-    % Update
-    N_links(new_idx(end-(m-1):end)) = N_links(new_idx(end-(m-1):end)) + 1;
-    N_links(t+3) = N_links(t+3) + m;
+    % Update k and population
+    k(new_idx) = k(new_idx) + 1;
+    k(t) = k(t) + m;
     N = N + 1;
-    waitbar(t/T)
     
-    % Plot graph
-    %     plot(graph(links))
-    %     pause(1)
+    waitbar(t/T)
 end
 toc;
 close(h)
 
-% Plot resulting network
-% figure()
-% plot(graph(links))
-
 % Plot histogram of resulting links
-bins = histcounts(N_links, 1:length(N_links));
-bin_length = 1:(length(N_links) - 1);
+bins = histcounts(k, 1:T)/T;
 figure()
-plot(bin_length, bins, '*')
+plot(1:T-1, bins)
+ylabel('Relative frequency')
+xlabel('Number of links')
 
 figure()
-loglog(bin_length, bins)
+loglog(1:T-1, bins, '.')
+ylabel('Relative frequency')
+xlabel('Number of links')
