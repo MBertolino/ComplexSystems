@@ -1,15 +1,17 @@
+clear all; close all; clc;
 
+% Param
 T = 1000;
 N = 5000;
 link_density = 0.0016;
+
+% Infection param
 r = 0.03; % Rate of recovery
 p = 0.001:0.001:0.01;
 
 % Pre-allocate links
 links = zeros(N, N);
 links_tot = zeros(N, 1);
-inf_eq = zeros(length(p), 1);
-rate = zeros(length(p), 1);
 
 % Infection probability
 P = zeros(N+1, length(p));
@@ -21,6 +23,8 @@ end
 inf_idx = randperm(N, 100);
 inf = zeros(T, N);
 inf(1, inf_idx) = 1;
+inf_eq = zeros(length(p), 1);
+rate = zeros(length(p), 1);
 
 % Build network
 for n = 1:N
@@ -46,7 +50,7 @@ for ip = 1:length(p)
         inf(t, :) = inf(t-1, :);
         
         % Recover
-        inf(t, (rand(1, n) < r)) = 0;
+        inf(t, (rand(1, N) < r)) = 0;
         
         % Get infected
         for n = 1:N
@@ -65,7 +69,6 @@ for ip = 1:length(p)
     plot(sum(inf, 2))
     ylabel('Infected individuals')
     xlabel('Time [Days]')
-    
 end
 
 % Plot 1.3

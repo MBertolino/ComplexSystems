@@ -10,7 +10,6 @@ links = zeros(T, T);
 links([1 2], [1 2]) = 1;
 links([3 4], [3 4]) = 1;
 links = links - diag(diag(links));
-
 k = zeros(T, 1);
 k(1:N) = 1;
 prob = zeros(N, 1);
