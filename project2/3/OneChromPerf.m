@@ -1,35 +1,74 @@
 function [out] = OneChromPerf(environment, chromosome)
 
-color = size(environment, 1)*size(environment, 2);
-position = [randi(size(environment(:, 1), 1)) randi(size(environment(:, 2), 1))];
-direction = randi(4); % 1 = north, 2 = west, 3 = south, 4 = east
+% Setup
+x_max = size(environment, 2) - 2;
+y_max = size(environment, 1) - 2;
+color = x_max*y_max;
+
+% Coordinates: x = [x0 x1 xf xl xr]
+pos(1, 2) = randi(x_max) + 1;
+pos(2, 2) = randi(y_max) + 1;
+while ((pos(1, 1)*pos(2, 1) <= 1) || pos(1, 1) > x_max + 1 || pos(2, 1) > y_max + 1)
+    direction = randi(4); % 1 = north, 2 = west, 3 = south, 4 = east
+    switch direction
+        case 1
+            pos(1, 1) = pos(1, 2);
+            pos(2, 1) = pos(2, 2) + 1;
+        case 2
+            pos(1, 1) = pos(1, 2) - 1;
+            pos(2, 1) = pos(2, 2);
+        case 3
+            pos(1, 1) = pos(1, 2);
+            pos(2, 1) = pos(2, 2) - 1;
+        case 4
+            pos(1, 1) = pos(1, 2) + 1;
+            pos(2, 1) = pos(2, 2);
+    end
+end
+pos(:, 3) = pos(:, 2) + pos(:, 2) - pos(:, 1); % forward
+pos(1, 4) = pos(1, 2) + pos(2, 2) - pos(2, 1); % left
+pos(2, 4) = pos(2, 2) + pos(1, 1) - pos(1, 2);
+pos(1, 5) = pos(1, 2) + pos(2, 1) - pos(2, 2); % right
+pos(2, 5) = pos(2, 2) + pos(1, 2) - pos(1, 1);
+
 
 % Start painting
 while (color > 0)
+    % Update old state
+    pos_temp = pos(:, 1);
+    pos(:, 1) = pos(:, 2);
+    
     % Read environment
-    h = num2str(environment(position(1), position(2)));
-    f = num2str(environment(position(1)+1, position(2)));
-    l = num2str(environment(position(1), position(2)-1));
-    r = num2str(environment(position(1), position(2)+1));
+    h = num2str(environment(pos(2, 2), pos(1, 2)));
+    f = num2str(environment(pos(2, 3), pos(1, 3)));
+    l = num2str(environment(pos(2, 4), pos(1, 4)));
+    r = num2str(environment(pos(2, 5), pos(1, 5)));
     
     % Action depending on chromosome
-    [h f l r]
-    base2dec([h f l r], 3)
     action = chromosome(base2dec([h f l r], 3) + 1);
-    switch action
-        case 1
-            postion(1) = postion(1) + 1;
-        case 2
-            position(2) = position(2) - 1;
-        case 3
-            position(2) = position(2) + 1;
-        case 4
-            position = position + [randi([-1 1]) randi([-1 1])];
+    if (action > 3)
+        action = randi([3 5]);
+    end
+    pos(:, 2) = pos(:, action);
+    
+    % If hitting the wall
+    if (pos(1, 2) > x_max + 1 || pos(1, 2) <= 1 || pos(2, 2) > y_max + 1 || pos(2, 2) <= 1)
+        pos(:, 2) = pos(:, 1);
+        pos(:, 1) = pos_temp;
+    else
+        % Update surroundings
+        pos(:, 3) = pos(:, 2) + pos(:, 2) - pos(:, 1); % forward
+        pos(1, 4) = pos(1, 2) + pos(2, 2) - pos(2, 1); % left
+        pos(2, 4) = pos(2, 2) + pos(1, 1) - pos(1, 2);
+        pos(1, 5) = pos(1, 2) + pos(2, 1) - pos(2, 2); % right
+        pos(2, 5) = pos(2, 2) + pos(1, 2) - pos(1, 1);
+        environment(pos(2, 2), pos(1, 2)) = 1;
     end
     
     % Paint
-    environment(position(1), position(2)) = 2;
     color = color - 1;
+%     imagesc(environment)
+%     pause(0.01)
 end
 
 out = environment;
