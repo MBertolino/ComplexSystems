@@ -3,15 +3,16 @@ clear all; %close all;
 % Setup
 % -1 = non-accessible, 0 = empty, 1 = painted
 % 1 = forward,  0 = left, -1 = right
-environment = zeros(20 + 2, 40 + 2);
+environment = zeros(20, 40);
 environment(:, [1 end]) = 2;
 environment([1 end], :) = 2;
 % 1 = straight, 2 = left, 3 = right, 4 = random
-chromosome = ones(54, 1)*4;
+% chromosome = ones(54, 1)*4;
+chromosome = randi([3 6], 54, 1);
 
 % Plot initial environment
 % figure()
-% imagesc(environment)
+imagesc(environment)
 
 % Paint
 out_environment = OneChromPerf(environment, chromosome);
