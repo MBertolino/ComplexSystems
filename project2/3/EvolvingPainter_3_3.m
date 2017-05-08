@@ -1,7 +1,7 @@
 clear all; close all;
 
 % Setup
-N_gen = 100;
+N_gen = 200;
 N_sims = 5;
 
 % Environment Setup

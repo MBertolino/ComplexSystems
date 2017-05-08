@@ -43,7 +43,6 @@ for iq = 1:length(q)
                 neigh = [neigh; status((dist(:, n) > 0) & (dist(:, n) > (L-R)), :)];
                 neigh_bdry_len = size(neigh, 1);
                 
-                
                 % Follow neighbors with probability p or q
                 chance = rand;
                 noise = rand*eta - eta/2;
