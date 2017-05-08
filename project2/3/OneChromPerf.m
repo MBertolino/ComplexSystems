@@ -8,7 +8,7 @@ color = x_max*y_max;
 % Coordinates: x = [x0 x1 xf xl xr]
 pos(1, 2) = randi([2 x_max-1]);
 pos(2, 2) = randi([2 y_max-1]);
-while ((pos(1, 1)*pos(2, 1) <= 1) || pos(1, 1) > x_max + 1|| pos(2, 1) > y_max + 1)
+while ((pos(1, 1) <= 1) || (pos(2, 1) <= 1) || pos(1, 1) > x_max + 1|| pos(2, 1) > y_max + 1)
     direction = randi(4); % 1 = north, 2 = west, 3 = south, 4 = east
     switch direction
         case 1

@@ -1,4 +1,4 @@
-clear all; %close all; 
+clear all; close all; 
 
 % Setup
 % -1 = non-accessible, 0 = empty, 1 = painted
@@ -6,13 +6,13 @@ clear all; %close all;
 environment = zeros(20, 40);
 environment(:, [1 end]) = 2;
 environment([1 end], :) = 2;
-% 1 = straight, 2 = left, 3 = right, 4 = random
-% chromosome = ones(54, 1)*4;
+% 3 = straight, 4 = left, 5 = right, 6 = random
+% chromosome = ones(54, 1)*6;
 chromosome = randi([3 6], 54, 1);
 
 % Plot initial environment
 % figure()
-imagesc(environment)
+% imagesc(environment)
 
 % Paint
 out_environment = OneChromPerf(environment, chromosome);
@@ -22,6 +22,6 @@ fitness = paint/(paint + empty)
 
 % Plot map after painter
 % figure()
-hold on;
-subplot(2, 2, 4)
-imagesc(out_environment)
+% hold on;
+% subplot(2, 2, 4)
+% imagesc(out_environment)
