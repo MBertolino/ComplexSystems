@@ -1,21 +1,34 @@
 clear all; close all;
 
 % Setup
-N_gen = 200;
-N_sims = 10;
+N_gen = 10;
+N_sims = 5;
 
 % Environment Setup
 % -1 = non-accessible, 0 = empty, 1 = painted
 % 1 = forward,  0 = left, -1 = right
-x_max = 40;
-y_max = 20;
+x_max = 42;
+y_max = 22;
 environment = zeros(y_max, x_max);
 environment(:, [1 end]) = 2;
 environment([1 end], :) = 2;
 
+% 3.5 Add furnitures
+environment([6 17], 0.5*end) = 2;
+environment(0.5*end:0.5*end+1, 0.5*end-2:0.5*end+2) = 2;
+environment([8 9], 11) = 2;
+environment([8 9], 31) = 2;
+environment([14 15], 11) = 2;
+environment([14 15], 31) = 2;
+
+% Initial room
+figure()
+colormap([1 1 1; 1 0.5 1; 0 0 0])
+imagesc(environment)
+
 % Chromosomes
 % 3 = straight, 4 = left, 5 = right, 6 = random
-N_chrom = 50;
+N_chrom = 20;
 L = 54;
 chromosome = randi([3 6], L, N_chrom);
 
@@ -38,7 +51,6 @@ for i = 1:N_gen
         end
     end
     fitness(i, :) = fitness(i, :)./N_sims;
-    %     fitness(i, :) = fitness(i, :)/(sum(fitness(i, :)));
     
     %     % 3.4 Genetic diveristy
     %     for l = 1:L
@@ -53,14 +65,12 @@ for i = 1:N_gen
         N_chroms(cross_over) = [];
         cross_over(2) = randsample(N_chroms, 1, 1, fitness(i, N_chroms));
         
+        % Get two children
         split = randi(L);
-        temp_mutation(1:split) = chromosome(1:split, cross_over(1));
-        temp_mutation(split+1:end) = chromosome(split+1:end, cross_over(2));
         chromosome_new(1:split, j) = chromosome(1:split, cross_over(2));
         chromosome_new(split+1:end, j) = chromosome(split+1:end, cross_over(1));
-        
-        chromosome_new(1:split, j+1) = temp_mutation(1:split);
-        chromosome_new(split+1:end, j+1) = temp_mutation(split+1:end);
+        chromosome_new(1:split, j+1) = chromosome(1:split, cross_over(1));
+        chromosome_new(split+1:end, j+1) = chromosome(split+1:end, cross_over(2));
     end
     
     % Mutate
@@ -70,6 +80,7 @@ for i = 1:N_gen
             chromosome_new(mutate, j) = randi([3 6]);
         end
     end
+    
     disp(i/N_gen)
     
     % Update chromosomes
