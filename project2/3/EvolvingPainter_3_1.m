@@ -11,8 +11,8 @@ environment([1 end], :) = 2;
 chromosome = randi([3 6], 54, 1);
 
 % Plot initial environment
-% figure()
-% imagesc(environment)
+figure()
+imagesc(environment)
 
 % Paint
 out_environment = OneChromPerf(environment, chromosome);

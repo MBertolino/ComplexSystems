@@ -12,6 +12,7 @@ links([3 4], [3 4]) = 1;
 links = links - diag(diag(links));
 k = zeros(T, 1);
 k(1:N) = 1;
+k_cum = zeros(N-m+1, 1);
 prob = zeros(N, 1);
 P = zeros(T, 1);
 
@@ -44,12 +45,21 @@ close(h)
 
 % Plot histogram of resulting links
 bins = histcounts(k, 1:T)/T;
-figure()
-plot(1:T-1, bins)
-ylabel('Relative frequency')
-xlabel('Number of links')
+% figure()
+% plot(1:T-1, bins)
+% ylabel('Relative frequency')
+% xlabel('Number of links')
 
 figure()
 loglog(1:T-1, bins, '.')
 ylabel('Relative frequency')
+xlabel('Number of links')
+
+% Plot cumulative distribution
+for i = 1:N-m+1
+    k_cum(i) = sum(k > i+m-1);
+end
+
+loglog(m:N, k_cum, '.')
+ylabel('Relative frequency of individuals > x')
 xlabel('Number of links')

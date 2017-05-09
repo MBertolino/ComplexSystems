@@ -2,7 +2,7 @@ clear all; close all;
 
 % Setup
 N_gen = 200;
-N_sims = 5;
+N_sims = 10;
 
 % Environment Setup
 % -1 = non-accessible, 0 = empty, 1 = painted
@@ -15,7 +15,7 @@ environment([1 end], :) = 2;
 
 % Chromosomes
 % 3 = straight, 4 = left, 5 = right, 6 = random
-N_chrom = 20;
+N_chrom = 50;
 L = 54;
 chromosome = randi([3 6], L, N_chrom);
 
@@ -47,10 +47,12 @@ for i = 1:N_gen
     
     % Single point cross-over
     for j = 1:2:N_chrom
+        % Choose parent
         N_chroms = 1:N_chrom;
         cross_over = randsample(N_chroms, 1, 1, fitness(i, :));
         N_chroms(cross_over) = [];
         cross_over(2) = randsample(N_chroms, 1, 1, fitness(i, N_chroms));
+        
         split = randi(L);
         temp_mutation(1:split) = chromosome(1:split, cross_over(1));
         temp_mutation(split+1:end) = chromosome(split+1:end, cross_over(2));
@@ -71,7 +73,7 @@ for i = 1:N_gen
     disp(i/N_gen)
     
     % Update chromosomes
-    chromosome = chromosome_new
+    chromosome = chromosome_new;
 end
 toc;
 
