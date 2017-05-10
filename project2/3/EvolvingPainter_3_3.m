@@ -1,7 +1,7 @@
 clear all; close all;
 
 % Setup
-N_gen = 10;
+N_gen = 200;
 N_sims = 5;
 
 % Environment Setup
@@ -13,7 +13,7 @@ environment = zeros(y_max, x_max);
 environment(:, [1 end]) = 2;
 environment([1 end], :) = 2;
 
-% 3.5 Add furnitures
+% % 3.5 Add furnitures
 environment([6 17], 0.5*end) = 2;
 environment(0.5*end:0.5*end+1, 0.5*end-2:0.5*end+2) = 2;
 environment([8 9], 11) = 2;
@@ -22,13 +22,13 @@ environment([14 15], 11) = 2;
 environment([14 15], 31) = 2;
 
 % Initial room
-figure()
-colormap([1 1 1; 1 0.5 1; 0 0 0])
-imagesc(environment)
+% figure()
+% colormap([1 1 1; 1 0.5 1; 0 0 0])
+% imagesc(environment)
 
 % Chromosomes
 % 3 = straight, 4 = left, 5 = right, 6 = random
-N_chrom = 20;
+N_chrom = 10;
 L = 54;
 chromosome = randi([3 6], L, N_chrom);
 
@@ -52,10 +52,17 @@ for i = 1:N_gen
     end
     fitness(i, :) = fitness(i, :)./N_sims;
     
-    %     % 3.4 Genetic diveristy
-    %     for l = 1:L
-    %         for
-    %         D(i) =
+    % 3.4 Genetic diveristy
+%     for k = 1:L
+%         for ic = 1:N_chrom
+%             for jc = 1:N_chrom
+%                 if (chromosome(k, ic) == chromosome(k, jc) && ic ~= jc)
+%                     D(i) = D(i) + 1;
+%                 end
+%             end
+%         end
+%     end
+%     D = D./(L*N_chrom*(N_chrom-1));
     
     % Single point cross-over
     for j = 1:2:N_chrom
@@ -90,4 +97,10 @@ toc;
 
 % 3.4 Average fitness
 % figure()
-plot(1:N_gen, mean(fitness, 2))
+% plot(1:N_gen, mean(fitness, 2))
+
+% 3.4 Chromosome diversity
+% figure()
+% plot(1:N_gen, D)
+% xlabel('Generations')
+% ylabel('Genetic diversity')
