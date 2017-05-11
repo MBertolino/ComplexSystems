@@ -4,12 +4,12 @@ clear all; close all;
 L = 20;
 N = 50; % Individuals
 R = 2; % Neighbor distance
-p = 0.1:0.1:0.9;
-q = 0;%p + 0.;%0:0.01:0.9;
+p = 0.0; %0.1:0.01:0.3;
+q = p + 0.6; %0:0.01:0.9;
 delta = 0.5;
 eta = 0.1;
 T = 100;
-N_sims = 10;
+N_sims = 100;
 
 % Initialize position and velocities
 status = rand(N, 3); % x_i(t), y_i(t), theta_i(t)
@@ -35,14 +35,20 @@ for ip = 1:length(p)
         for j = 1:N_sims
             psi(1, iq) = (sum(cos(status(:, 3))).^2 + sum(sin(status(:, 3))).^2)/N;
             for t = 2:T
+                % Mean position
+                mu = mean(status(:, 1:2));
+                
+                % Move all particles
                 for n = 1:N
                     % Find neighbors
                     dist(:, n) = sqrt((status(n, 1) - status(:, 1)).^2 + (status(n, 2) - status(:, 2)).^2);
-                    total_dist(n) = mean(dist(:, n));
                     neigh = status((dist(:, n) > 0) & (dist(:, n) < R), :);
                     neigh_len = size(neigh, 1);
                     neigh = [neigh; status((dist(:, n) > 0) & (dist(:, n) > (L-R)), :)];
                     neigh_bdry_len = size(neigh, 1);
+                    
+                    % Dispersion from mean
+                    total_dist(n) = sqrt((mu(1) - status(n, 1)).^2 + (mu(2) - status(n, 2)).^2);
                     
                     % Follow neighbors with probability p or q
                     chance = rand;
@@ -62,7 +68,7 @@ for ip = 1:length(p)
                         theta_new(n) = status(n, 3) - noise;
                     end
                     
-                    % Face neighbor
+                    % Face neighbour
                     if (chance < p(ip))
                         neigh_x = neigh(follow_me, 1);
                         neigh_y = neigh(follow_me, 2);
@@ -97,20 +103,18 @@ for ip = 1:length(p)
                 %             psi(t, iq) = psi(t, iq) + sqrt(sum(cos(status(:, 3))).^2 + sum(sin(status(:, 3))).^2)/N;
                 
                 % 2.3 Aggregation measure
-                %             mu = mean(status(:, [1 2]));
-                phi(t, iq) = phi(t, iq) + mean(total_dist);
-                %             phi(t, iq) = phi(t, iq) + (sum(status(:, 1) - mu(1)).^2 + sum(status(:, 2) - mu(2)).^2)/N;
+                phi(t, ip) = phi(t, ip) + mean(total_dist);
                 
                 % Plot all individuals
-                %             plot(status(:, 1), status(:, 2), 's')
-                %             xlim([0 L])
-                %             ylim([0 L])
-                %             xlabel(['Time = ' num2str(t)])
-                %             pause(1)
+                plot(status(:, 1), status(:, 2), 's')
+                xlim([0 L])
+                ylim([0 L])
+                xlabel(['Time = ' num2str(t)])
+                pause(0.01)
             end
         end
-        iq/length(q)
     end
+    ip/length(p)
 end
 toc;
 psi = psi/N_sims;
@@ -124,6 +128,6 @@ phi = phi/N_sims;
 
 % 2.3 Plot aggregation measure
 figure()
-plot(1:T, phi)
-xlabel('Time')
+plot(p, phi(2:end, :), '.')
+xlabel('Parameter p')
 ylabel('Aggregation [\phi(t)]')
