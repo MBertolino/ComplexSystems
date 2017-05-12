@@ -7,7 +7,7 @@ link_density = 0.0016;
 
 % Infection param
 r = 0.03; % Rate of recovery
-p = 0.001:0.001:0.01;
+p = 0.01; % 0.001:0.001:0.01;
 
 % Pre-allocate links
 links = zeros(N, N);
@@ -54,7 +54,8 @@ for ip = 1:length(p)
         
         % Get infected
         for n = 1:N
-            if rand < P(links_tot(n)+1, ip)
+            n_inf = sum(inf(t-1, find(links(:, n) == 1)));
+            if rand < P(n_inf+1, ip)
                 inf(t, n) = 1;
             end
         end
@@ -69,6 +70,8 @@ for ip = 1:length(p)
     plot(sum(inf, 2))
     ylabel('Infected individuals')
     xlabel('Time [Days]')
+    
+    ip/length(p)
 end
 
 % Plot 1.3
