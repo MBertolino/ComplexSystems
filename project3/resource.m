@@ -29,28 +29,36 @@ for t = 1:T
         % Select one individual
         s = randsample(1:length(S(:, t)), 1, 1, S(:, t));
         
-        % Calculating chosen organisms species
-        i = 1 + floor(s/n);
-        j = 
+        % Calculating chosen organisms speciess = 5;
+        c = 0;
+        for ii = 1:n
+            for jj = ii:n
+                if (c < s)
+                    c = c + 1;
+                    i = ii;
+                    j = jj;
+                end
+            end
+        end
         
         % Reproduce
         if (i == j)
-            q = (R(i)./(a+R(i))).*((R(i)-1)./(a+R(i)-1));
+            q = (R(i)./(a + R(i))).*((R(i) - 1)./(a + R(i) - 1));
         else
-            q = (R(i)./(a+R(i))).*(R(j)./(a+R(j)))
+            q = (R(i)./(a + R(i))).*(R(j)./(a + R(j))); 
         end
         if (rand < q)
-           if (i + j < n + 1)
-               S(s) = S(s) +1;
-               R(i) = R(i+j) + 1;
-           elseif (i + j == n + 1)
-               S(s) = S(s) + 1;
-               R(1) = R(1) + 1;
-           else
-               S(s) = S(s) + 1;
-               R(1) = R(1) + 1;
-               R(mod((i+j), (n+1))) = R(mod((i+j), (n+1))) + 1;
-           end
+            if (i + j < n + 1)
+                S(s) = S(s) +1;
+                R(i) = R(i + j) + 1;
+            elseif (i + j == n + 1)
+                S(s) = S(s) + 1;
+                R(1) = R(1) + 1;
+            else
+                S(s) = S(s) + 1;
+                R(1) = R(1) + 1;
+                R(mod((i + j), (n + 1))) = R(mod((i + j), (n + 1))) + 1;
+            end
         else
             S(s) = S(s) - 1;
         end
