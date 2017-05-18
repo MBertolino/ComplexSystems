@@ -49,8 +49,10 @@ for t = 1:T
            else
                S(s) = S(s) + 1;
                R(1) = R(1) + 1;
-               R(mod((i+j),(n+1))) = R(mod((i+j),(n+1))) + 1;
+               R(mod((i+j), (n+1))) = R(mod((i+j), (n+1))) + 1;
            end
+        else
+            S(s) = S(s) - 1;
         end
     end
 end
