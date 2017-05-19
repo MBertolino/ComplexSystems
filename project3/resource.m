@@ -1,17 +1,16 @@
-clear all; %close all;
+clear all; close all;
 
 % Params
-n = 3;
+n = 9;
 a = 5;
-u = 2;
-mu = 500;
-p = 0.001;
+u = 7;
+mu = 5000;
+p = 0.00005;
 
 % Constants
-T = 3000;
-
+T = 1000;
 % Initialize data
-S = zeros(6, T); % Species at time t
+S = zeros(45, T); % Species at time t
 S(1:end, 1) =  1;
 R = zeros(n, 1); % Metabolites
 N = zeros(T, 1); % Total number of species at time t
@@ -50,7 +49,12 @@ for t = 1:T
                 end
             end
         end
-        
+%         if i == 2 && j == 3
+%             disp(['R1 ' num2str(R(1))]);
+%             disp(['R2 ' num2str(R(2))]);
+%             disp(['R3 ' num2str(R(3))]);
+%             disp(['S23 ' num2str(S(5))]);
+%         end
         % Reproduce
         reproduce = rand;
         
@@ -73,20 +77,20 @@ for t = 1:T
         end
         
         if (reproduce < q)
-            % Mutate
+            % Mutate if smaller
             if (rand >= p)
                 m = s;
             end
             
             % Update
             if ((i+j) < (n+1))
-                S(m, t+1) = S(m, t) + 1;
+                S(m, t) = S(m, t) + 1;
                 R(i+j) = R(i+j) + 1;
             elseif ((i+j) == (n+1))
-                S(m, t+1) = S(m, t) + 1;
+                S(m, t) = S(m, t) + 1;
                 R(1) = R(1) + 1;
             else
-                S(m, t+1) = S(m, t) + 1;
+                S(m, t) = S(m, t) + 1;
                 R(1 + mod(i+j, n+1)) = R(1 + mod(i+j, n+1)) + 1;
             end
             
@@ -97,13 +101,25 @@ for t = 1:T
             % Individual dies
             S(s, t+1) = S(s, t) - 1;
         end
+        
+%         if i == 2 && j == 3
+%             disp(['R1 ' num2str(R(1))]);
+%             disp(['R2 ' num2str(R(2))]);
+%             disp(['R3 ' num2str(R(3))]);
+%             disp(['S23 ' num2str(S(5))]);
+%             disp(' ');
+%         end
     end
+    S(:, t+1) = S(:, t);
+
 end
 N(t) = sum(S(:, t));
 disp(['standard deviation of N: ' num2str(std(N))]);
-
+close(h);
 % Plot population
 figure()
-plot(1:t, N(1:t));
+area(1:t, S(:,1:t)');
+legend('1', '2', '3', '4', '5', '6');
+%plot(1:t, N(1:t));
 xlabel('Time')
 ylabel('Population')
