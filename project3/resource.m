@@ -1,14 +1,14 @@
-clear all; close all;
+clear all; %close all;
 
 % Params
 n = 3;
 a = 5;
-u = 1;
+u = 2;
 mu = 500;
-p = 0.0002;
+p = 0.001;
 
 % Constants
-T = 1000;
+T = 3000;
 
 % Initialize data
 S = zeros(6, T); % Species at time t
@@ -16,8 +16,10 @@ S(1:end, 1) =  1;
 R = zeros(n, 1); % Metabolites
 N = zeros(T, 1); % Total number of species at time t
 
+h = waitbar(0/T, 'Progress');
 % Step in time
 for t = 1:T
+    waitbar(t/T, h, ['Progress: ' num2str(round((t/T)*100, 1)) ' % ']);
     % Update whole population
     N(t) = sum(S(:, t));
     if (N(t) == 0)
@@ -71,15 +73,12 @@ for t = 1:T
             % Update
             if ((i+j) < (n+1))
                 S(m, t+1) = S(m, t) + 1;
-                %                 R(i) = R(i+j) + 1;
                 R(i+j) = R(i+j) + 1;
             elseif ((i+j) == (n+1))
                 S(m, t+1) = S(m, t) + 1;
                 R(1) = R(1) + 1;
             else
                 S(m, t+1) = S(m, t) + 1;
-                %                 R(1) = R(1) + 1;
-                %                 R(mod((i+j), (n+1))) = R(mod((i+j), (n+1))) + 1;
                 R(1 + mod(i+j, n+1)) = R(1 + mod(i+j, n+1)) + 1;
             end
             
@@ -93,7 +92,7 @@ for t = 1:T
     end
 end
 N(t) = sum(S(:, t));
-
+disp(['standard deviation of N: ' num2str(std(N))]);
 % Plot population
 figure()
 plot(1:t, N(1:t));
