@@ -18,15 +18,17 @@ N = zeros(T, 1); % Total number of species at time t
 
 % Step in time
 for t = 1:T
+    % Update whole population
     N(t) = sum(S(:, t));
     if (N(t) == 0)
         break;
     end
+    
     % Generate a time interval
-    dt = exprnd(1/N(t), N(t), 1);
+    dt = exprnd(1/N(t), 1, 1);
     
     % Inflow of metabolites
-    R(u) = R(u) + mu*dt(u);
+    R(u) = R(u) + mu*dt;
     
     for k = 1:N(t)
         % Select one individual
@@ -46,6 +48,7 @@ for t = 1:T
                 end
             end
         end
+        
         % Reproduce
         if (i == j)
             q = (R(i)./(a + R(i))).*((R(i) - 1)./(a + R(i) - 1));
