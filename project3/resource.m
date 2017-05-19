@@ -33,7 +33,7 @@ while t <= T
     
     % Select one individual
     s = randsample(1:N_spec, 1, 1, S_tmp);
- 
+    
     % Calculating chosen organisms species (the ugly way);
     tmp = 0;
     for k = 0:n - 1
@@ -48,10 +48,9 @@ while t <= T
             break;
         end
     end
-
+    
     % Reproduce
     reproduce = rand;
-    
     if (i == j)
         q = (R(i)./(a + R(i))).*((R(i) - 1)./(a + R(i) - 1));
         if (R(i) < 2)
@@ -71,7 +70,6 @@ while t <= T
     end
     
     if (reproduce < q)
-        
         % Metabolites consumed during reproduction
         R(i) = R(i) - 1;
         R(j) = R(j) - 1;
@@ -83,16 +81,14 @@ while t <= T
         
         % Update
         if ((i+j) < (n+1))
-            S_tmp(m) = S_tmp(m) + 1;
             R(i+j) = R(i+j) + 1;
         else
-            S_tmp(m) = S_tmp(m) + 1;
             R(1) = R(1) + 1;
             if ((i+j) - (n+1) > 0)
                 R(1) = R(1) + 1;
             end
         end
-        
+        S_tmp(m) = S_tmp(m) + 1;
         S_tmp(s) = S_tmp(s) + 1;
     end
     
