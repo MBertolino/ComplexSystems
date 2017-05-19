@@ -35,7 +35,7 @@ for t = 1:T
     for k = 1:N(t)
         % Select one individual
         s = randsample(1:length(S(:, t)), 1, 1, S(:, t));
-
+        
         % Calculating chosen organisms species (the ugly way);
         c = 0;
         for ii = 1:n
@@ -52,10 +52,18 @@ for t = 1:T
         end
         
         % Reproduce
+        reproduce = rand;
+        
         if (i == j)
             q = (R(i)./(a + R(i))).*((R(i) - 1)./(a + R(i) - 1));
+            if (R(i) < 2)
+                reproduce = q + 1;
+            end
         else
             q = (R(i)./(a + R(i))).*(R(j)./(a + R(j)));
+            if (R(i) < 1 || R(j) < 1)
+                reproduce = q + 1;
+            end
         end
         
         % If reproduction else death
@@ -64,7 +72,7 @@ for t = 1:T
             m = randi(length(S(:, 1)));
         end
         
-        if (rand < q)
+        if (reproduce < q)
             % Mutate
             if (rand >= p)
                 m = s;
@@ -88,11 +96,12 @@ for t = 1:T
         else
             % Individual dies
             S(s, t+1) = S(s, t) - 1;
-        end 
+        end
     end
 end
 N(t) = sum(S(:, t));
 disp(['standard deviation of N: ' num2str(std(N))]);
+
 % Plot population
 figure()
 plot(1:t, N(1:t));
