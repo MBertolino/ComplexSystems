@@ -1,9 +1,9 @@
 clear all; close all;
 
 % Params
-n = 2;
+n = 3;
 a = 5;
-u = 1;
+u = 2;
 mu = 500;
 p = 0.001;
 N_spec = n*(n+1)*0.5;
