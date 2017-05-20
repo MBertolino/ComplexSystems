@@ -10,7 +10,7 @@ N_spec = n*(n+1)*0.5;
 
 % Constants
 t = 1;
-T = 500;
+T = 20;
 
 % Initialize data
 S = zeros(N_spec, T); % Species at time t
@@ -22,21 +22,24 @@ N(t) = sum(S(:, t));
 
 h = waitbar(0/T, 'Progress');
 % Step in time
+tic;
 while t <= T
     waitbar(t/T, h, ['Progress: ' num2str(round((t/T)*100, 1)) ' % ']);
+    S_sum = sum(S_tmp);
     
     % Generate a time interval
-    dt = exprnd(1/sum(S_tmp));
+    dt = exprnd(1/S_sum);
     
     % Inflow of metabolites
     R(u) = R(u) + mu*dt;
     
     % Select one individual
-    s = randsample(1:N_spec, 1, 1, S_tmp);
+    %             s = randsample(1:N_spec, 1, 1, S_tmp);
+    s = find(rand <= cumsum(S_tmp/S_sum), 1); % Maybe a bit faster since S_sum already needs to be computed
     
     % Calculating chosen organisms species (the ugly way);
     tmp = 0;
-    for k = 0:n - 1
+    for k = 0:n-1
         tmp = tmp + n - k;
         if s < tmp
             i = k + 1;
@@ -50,23 +53,16 @@ while t <= T
     end
     
     % Reproduce
+    q = 0;
     reproduce = rand;
-    if (i == j)
-        q = (R(i)./(a + R(i))).*((R(i) - 1)./(a + R(i) - 1));
-        if (R(i) < 2)
-            reproduce = q + 1;
-        end
-    else
-        q = (R(i)./(a + R(i))).*(R(j)./(a + R(j)));
-        if (R(i) < 1 || R(j) < 1)
-            reproduce = q + 1;
-        end
-    end
-    
-    % If reproduction else death
-    m = randi(N_spec);
-    while (m == s)
-        m = randi(N_spec);
+    if (i == j && R(i) >= 2)
+        %         q = (R(i)./(a + R(i))).*((R(i) - 1)./(a + R(i) - 1));
+        q = R(i)*(R(i) - 1);
+        reproduce = reproduce*(a + R(i))*(a + R(i) - 1);
+    elseif (R(i) >= 1 && R(j) >= 1)
+        %         q = (R(i)./(a + R(i))).*(R(j)./(a + R(j)));
+        q = R(i)*R(j);
+        reproduce = reproduce*(a + R(i))*(a + R(j));
     end
     
     if (reproduce < q)
@@ -74,27 +70,29 @@ while t <= T
         R(i) = R(i) - 1;
         R(j) = R(j) - 1;
         
+        m = s;
         % Mutate if smaller
-        if (rand >= p)
-            m = s;
-        end
-        
-        % Update
-        if ((i+j) < (n+1))
-            R(i+j) = R(i+j) + 1;
-        else
-            R(1) = R(1) + 1;
-            if ((i+j) - (n+1) > 0)
-                R(1) = R(1) + 1;
+        if (rand < p)
+            m = randi(N_spec);
+            while (m == s)
+                m = randi(N_spec);
             end
         end
+        
+        if ((i+j) == (n+1))
+            R(1) = R(1) + 1;
+        elseif ((i+j) < (n+1))
+            R(i+j) = R(i+j) + 1;
+        else
+            R(1) = R(1) + 2;
+        end
         S_tmp(m) = S_tmp(m) + 1;
-        S_tmp(s) = S_tmp(s) + 1;
+    else
+        % Individual dies
+        S_tmp(s) = S_tmp(s) - 1;
     end
     
-    % Individual dies
-    S_tmp(s) = S_tmp(s) - 1;
-    
+    % Update time
     t_old = t;
     t = t + dt;
     if floor(t) - floor(t_old) == 1
@@ -107,6 +105,7 @@ while t <= T
         end
     end
 end
+toc;
 %N(t) = sum(S(:, t));
 disp(['standard deviation of N: ' num2str(std(N))]);
 close(h);
