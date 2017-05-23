@@ -1,16 +1,16 @@
 clear all; close all;
 
 % Params
-n = 3;
+n = 2;
+u = 1;
 a = 5;
-u = 2;
 mu = 500;
 p = 0.001;
 N_spec = n*(n+1)*0.5;
 
 % Constants
 t = 1;
-T = 20;
+T = 6000;
 
 % Initialize data
 S = zeros(N_spec, T); % Species at time t
